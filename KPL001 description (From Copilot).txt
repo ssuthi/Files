@@ -1,0 +1,58 @@
+The SQL script Bond_FIFO_EffYield_ViewV.original.sql defines a stored procedure named Bond_FIFO_EffYield_ViewV used for calculating effective yield and P&L (Profit and Loss) for bond and paper instruments using the FIFO (First-In-First-Out) inventory method and constant yield amortization.
+
+🔍 Purpose
+To generate a detailed report of bond and paper transactions, including:
+Realized and unrealized P&L
+Accrued interest
+Amortized amounts
+Effective yields
+Position tracking over time
+
+🧮 Key Features & Logic
+1. Input Parameters
+The procedure accepts multiple parameters to filter and control the calculation:
+Portfolio, folder, branch, group IDs
+Evaluation date range
+Price source (H for historical, R for real-time)
+Accrued convention (F for first, L for last)
+Amortization type (V for value date, T for trade date)
+Deal type (B for bonds, P for papers, A for all)
+Flags for storing values and including certain P&L components
+2. Data Preparation
+Selects relevant folders and deals based on hierarchy and filters.
+Retrieves market data (price, accrued interest) from historical or real-time sources.
+Calculates conversion rates and adjusts prices for yield-based quotations.
+3. FIFO Matching
+Implements FIFO logic to match buy and sell transactions.
+Calculates realized P&L, accrued interest, and amortized amounts for each matched pair.
+Handles unmatched positions and computes their unrealized values.
+4. Amortization & Yield Calculation
+Uses a constant yield method to compute amortization.
+Converts between price and yield using helper procedures.
+Updates yields for positions and off-balance sheet items.
+5. Reporting Tables
+Creates and populates several temporary and permanent tables:
+#Position, #FromStartPnL, #OffBalancePL, #FoldersPL, #AllPL
+Final results are stored in FIFOReportView and other output tables (mbINT_FIFOReport_OUP1, etc.)
+6. Storage & Cleanup
+Optionally stores computed values in permanent tables (FromStartFIFOPLV, PositionV, etc.)
+Cleans up old data based on evaluation date and retention logic.
+
+📊 Outputs
+The procedure produces:
+Detailed deal-level P&L (realized, accrued, amortized)
+Folder-level and overall summaries
+Effective yield calculations
+Off-balance sheet positions
+Historical tracking for audit and reporting
+
+🧠 Business Context
+This procedure is likely used in financial institutions for:
+Risk and performance reporting
+Regulatory compliance
+Accounting and audit trails
+Valuation and pricing of fixed-income instruments
+
+Here is the data flow diagram for the Bond_FIFO_EffYield_ViewV procedure, illustrating how data moves through the system during the bond FIFO effective yield and P&L calculation:
+!Bond FIFO Data Flow Diagram
+
